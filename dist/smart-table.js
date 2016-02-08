@@ -530,5 +530,31 @@ ng.module('smart-table')
       }
     };
   }]);
+  
+ng.module('smart-table')
+  .directive('stGroup', ['stConfig', '$parse', function (stConfig, $parse) {
+          return {
+              restrict: 'A',
+              require: '^stTable',
+              scope: {
+                  stGroup: '='
+              },
+              link: function (scope, element, attr, ctrl) {
+                  var predicate = scope.stGroup;
+
+                  //view --> table state
+                  function group() {
+                      ctrl.groupBy(predicate);
+                  }
+
+                  // watch the change in the variable which is attached to the st-group
+                  scope.$watch('stGroup', function () {
+                      predicate = scope.stGroup;
+
+                      group();
+                  });
+              }
+          };
+      }]);
 
 })(angular);
